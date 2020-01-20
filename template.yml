@@ -93,7 +93,7 @@ Resources:
         Variables:
           DYNAMODB_STATE_TABLE:
             Ref: CognitoStatesTable
-          REGION: "${AWS::Region}"
+          REGION: !Ref "AWS::Region"
 
   Token:
     Type: AWS::Serverless::Function
@@ -165,7 +165,7 @@ Resources:
         Variables:
           DYNAMODB_STATE_TABLE:
             Ref: CognitoStatesTable
-          REGION: "${AWS::Region}"
+          REGION: !Ref "AWS::Region"
 
 Outputs:
   GitHubShimIssuer:
