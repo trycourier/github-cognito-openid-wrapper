@@ -4,22 +4,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd)"  # Figure out where the
 PROJECT_ROOT="$SCRIPT_DIR"/.. # Figure out where the project directory is
 
 # Ensure dependencies are present
-# require_binary aws
-# require_binary sam
+require_binary aws
+require_binary sam
 
-# configuration file will not exist in ci build environments
-IS_CI_ENVIRONMENT=${CI:-false}
-echo "IS_CI_ENVIRONMENT: $IS_CI_ENVIRONMENT"
+# Ensure configuration is present
 
-if [ "$IS_CI_ENVIRONMENT" = false ]; then
-  # Ensure configuration is present
-  if [ ! -f "$PROJECT_ROOT/config.sh" ]; then
-    echo "ERROR: config.sh is missing. Copy example-config.sh and modify as appropriate."
-    echo "   cp example-config.sh config.sh"
-    exit 1
-  fi
-  source ./config.sh
+if [ ! -f "$PROJECT_ROOT/config.sh" ]; then
+  echo "ERROR: config.sh is missing. Copy example-config.sh and modify as appropriate."
+  echo "   cp example-config.sh config.sh"
+  exit 1
 fi
+source ./config.sh
 
 STACK_NAME_REQUIRED_PATTERN="github-oauth"
 if [[ "$STACK_NAME" == *"$STACK_NAME_REQUIRED_PATTERN" ]]; then
@@ -34,7 +29,6 @@ aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
 sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
 sam deploy \
   --region "$REGION" \
-  # --role-arn "" \
   --stack-name "$STACK_NAME" \
   --template-file "$OUTPUT_TEMPLATE_FILE" \
   --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE_NAME" \
