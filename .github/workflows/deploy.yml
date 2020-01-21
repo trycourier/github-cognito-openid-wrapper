@@ -27,12 +27,11 @@ jobs:
         run: npm install
       - name: Build aws-sam-cli Package
         uses: apex/actions/aws/sam@master
-        env:
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         with:
           args: package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
         env:
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           BUCKET_NAME: backend-production-github-oauth-bucket
           COGNITO_REDIRECT_URI: https://courier-dev-730438017227.auth.us-east-1.amazoncognito.com/oauth2/idpresponse
           GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
