@@ -1,5 +1,5 @@
 module.exports = {
-  AWS_REGION: process.env.AWS_REGION,
+  REGION: process.env.AWS_REGION,
   COGNITO_REDIRECT_URI: process.env.COGNITO_REDIRECT_URI,
   DYNAMODB_STATE_TABLE: process.env.DYNAMODB_STATE_TABLE,
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
