@@ -25,13 +25,13 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BUCKET_NAME: backend-production-github-oauth-bucket
           CI: true
           COGNITO_REDIRECT_URI: https://courier-dev-730438017227.auth.us-east-1.amazoncognito.com/oauth2/idpresponse
-          GITHUB_CLIENT_ID: 0f37273ba14143d1ab8c
+          GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
           GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
           NODE_ENV: production
-          REGION: "us-east-1"
+          REGION: us-east-1
+          STACK_NAME: backend-production-github-oauth
           STAGE: production
-          STACK_NAME: backend-$STAGE_NAME-github-oauth
-          BUCKET_NAME: $STACK_NAME-bucket
         run: npm run deploy

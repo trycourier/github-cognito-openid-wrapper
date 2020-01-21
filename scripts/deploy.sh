@@ -31,13 +31,13 @@ else
   exit 1
 fi
 
-# OUTPUT_TEMPLATE_FILE="$PROJECT_ROOT/serverless-output.yml"
-# aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
-# sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
-# sam deploy \
-#   --region "$REGION" \
-#   # --role-arn "" \
-#   --stack-name "$STACK_NAME" \
-#   --template-file "$OUTPUT_TEMPLATE_FILE" \
-#   --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE_NAME" \
-#   --capabilities CAPABILITY_IAM
+OUTPUT_TEMPLATE_FILE="$PROJECT_ROOT/serverless-output.yml"
+aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
+sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
+sam deploy \
+  --region "$REGION" \
+  # --role-arn "" \
+  --stack-name "$STACK_NAME" \
+  --template-file "$OUTPUT_TEMPLATE_FILE" \
+  --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE_NAME" \
+  --capabilities CAPABILITY_IAM
