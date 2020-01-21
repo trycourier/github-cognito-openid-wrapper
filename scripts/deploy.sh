@@ -19,8 +19,6 @@ if [ "$IS_CI_ENVIRONMENT" = false ]; then
     exit 1
   fi
   source ./config.sh
-else
-  printenv
 fi
 
 STACK_NAME_REQUIRED_PATTERN="github-oauth"
