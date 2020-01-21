@@ -8,10 +8,10 @@ require_binary aws
 require_binary sam
 
 # configuration file will not exist in ci build environments
-IS_CI_ENV=${IS_CI:-false}
-echo "IS_CI_ENV: $IS_CI_ENV"
+IS_CI_ENVIRONMENT=${CI:-false}
+echo "IS_CI_ENVIRONMENT: $IS_CI_ENVIRONMENT"
 
-if [ "$IS_CI_ENV" = false ]; then
+if [ "$IS_CI_ENVIRONMENT" = false ]; then
   # Ensure configuration is present
   if [ ! -f "$PROJECT_ROOT/config.sh" ]; then
     echo "ERROR: config.sh is missing. Copy example-config.sh and modify as appropriate."
@@ -19,6 +19,8 @@ if [ "$IS_CI_ENV" = false ]; then
     exit 1
   fi
   source ./config.sh
+else
+  printenv
 fi
 
 STACK_NAME_REQUIRED_PATTERN="github-oauth"
@@ -29,13 +31,13 @@ else
   exit 1
 fi
 
-OUTPUT_TEMPLATE_FILE="$PROJECT_ROOT/serverless-output.yml"
-aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
-sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
-sam deploy \
-  --region "$REGION" \
-  # --role-arn "" \
-  --stack-name "$STACK_NAME" \
-  --template-file "$OUTPUT_TEMPLATE_FILE" \
-  --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE_NAME" \
-  --capabilities CAPABILITY_IAM
+# OUTPUT_TEMPLATE_FILE="$PROJECT_ROOT/serverless-output.yml"
+# aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
+# sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
+# sam deploy \
+#   --region "$REGION" \
+#   # --role-arn "" \
+#   --stack-name "$STACK_NAME" \
+#   --template-file "$OUTPUT_TEMPLATE_FILE" \
+#   --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE_NAME" \
+#   --capabilities CAPABILITY_IAM

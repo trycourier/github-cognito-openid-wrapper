@@ -1,0 +1,34 @@
+name: Deploy Github OIDC Shim
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: npm install
+      - name: Test & Deploy
+        if: github.ref == 'refs/heads/dd-github-sso'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          NODE_ENV: production
+          STAGE: production
+          GITHUB_CLIENT_ID: 0f37273ba14143d1ab8c
+          GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+          COGNITO_REDIRECT_URI: https://courier-dev-730438017227.auth.us-east-1.amazoncognito.com/oauth2/idpresponse
+          STACK_NAME: backend-$STAGE_NAME-github-oauth
+          BUCKET_NAME: $STACK_NAME-bucket
+          REGION: "us-east-1"
+        run: npm run deploy
