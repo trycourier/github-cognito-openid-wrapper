@@ -25,7 +25,9 @@ jobs:
       #   run: brew tap aws/tap && brew install aws-sam-cli
       - name: Install Dependencies
         run: npm install
-      - name: Build aws-sam-cli Package
+      - name: Test and Build
+        run: npm run build-dist
+      - name: Deploy Aws-Sam-Cli Package
         uses: apex/actions/aws/sam@master
         with:
           args: package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
