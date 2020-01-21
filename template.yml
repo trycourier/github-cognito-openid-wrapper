@@ -43,7 +43,6 @@ Resources:
   CognitoStatesTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      # TableName: ${self:custom.prefix}-cognito-states
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
