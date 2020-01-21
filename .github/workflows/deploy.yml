@@ -15,14 +15,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - uses: artemnovichkov/action-homebrew@0.1.0
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: npm install
-      - name: GitHub Action for Homebrew > Install aws-sam-cli
-        uses: artemnovichkov/action-homebrew@0.1.0
+      - name: Install sam
         run: brew tap aws/tap && brew install aws-sam-cli
       - name: Test & Deploy
         env:
