@@ -27,6 +27,7 @@ jobs:
         uses: apex/actions/aws/sam@master
         with:
           args: |
+            echo "creating s3 bucket..."
             /usr/local/bin/aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
             sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
             sam deploy \
