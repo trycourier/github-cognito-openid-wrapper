@@ -4,6 +4,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd)"  # Figure out where the
 PROJECT_ROOT="$SCRIPT_DIR"/.. # Figure out where the project directory is
 
 # Ensure dependencies are present
+
 require_binary aws
 require_binary sam
 
