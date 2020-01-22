@@ -24,5 +24,4 @@ sam deploy \
   --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE_NAME" \
   --region "$REGION" \
   --stack-name "$STACK_NAME" \
-  --tags "courierOwnerId=123" \
   --template-file "$OUTPUT_TEMPLATE_FILE"
