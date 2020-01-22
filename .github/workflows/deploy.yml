@@ -27,7 +27,9 @@ jobs:
         uses: apex/actions/aws/sam@master
         with:
           args: |
-            pip3 install awscli --upgrade --user
+            aws --version
+            which python
+            ls -al /usr/local/bin/python
             aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
             package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
             sam deploy \
