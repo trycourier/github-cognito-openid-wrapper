@@ -27,6 +27,7 @@ jobs:
         uses: apex/actions/aws/sam@master
         with:
           args: |
+            aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
             package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
             sam deploy \
               --capabilities CAPABILITY_IAM \
@@ -38,7 +39,7 @@ jobs:
         env:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          BUCKET_NAME: backend-production-github-oauth-bucket
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           COGNITO_REDIRECT_URI: https://courier-dev-730438017227.auth.us-east-1.amazoncognito.com/oauth2/idpresponse
           GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
           GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
