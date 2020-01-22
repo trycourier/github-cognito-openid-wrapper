@@ -19,26 +19,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install Dependencies
-        run: npm install
-      - name: Test and Build
-        run: npm run build-dist
+      # - name: Install Dependencies
+      #   run: npm install
+      # - name: Test and Build
+      #   run: npm run build-dist
       - name: Deploy to AWS
         uses: apex/actions/aws/sam@master
         with:
           args: |
-            aws --version
-            which python
+            pip install awscli --upgrade --user
+            pip list -o
             ls -al /usr/local/bin/python
-            aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
-            package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
-            sam deploy \
-              --capabilities CAPABILITY_IAM \
-              --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE" \
-              --region "$REGION" \
-              --stack-name "$STACK_NAME" \
-              --tags stackOwnerArn="$STACK_OWNER_ARN" \
-              --template-file "$OUTPUT_TEMPLATE_FILE"
+            which python
+            which aws
         env:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
