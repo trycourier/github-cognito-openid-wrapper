@@ -28,7 +28,13 @@ jobs:
         with:
           args: |
             package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
-            sam deploy --region "$REGION" --stack-name "$STACK_NAME" --template-file "$OUTPUT_TEMPLATE_FILE" --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE" --capabilities CAPABILITY_IAM
+            sam deploy \
+              --capabilities CAPABILITY_IAM \
+              --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE" \
+              --region "$REGION" \
+              --stack-name "$STACK_NAME" \
+              --tags courierOwnerId=true \
+              --template-file "$OUTPUT_TEMPLATE_FILE"
         env:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
