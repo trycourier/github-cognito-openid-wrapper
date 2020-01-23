@@ -31,6 +31,7 @@ jobs:
               --capabilities CAPABILITY_IAM \
               --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE" \
               --region "$REGION" \
+              --role-arn "$STACK_ROLE_ARN" \
               --stack-name "$STACK_NAME" \
               --tags githubSsoOwnerArn="$STACK_OWNER_ARN" \
               --template-file "$OUTPUT_TEMPLATE_FILE"
@@ -45,5 +46,5 @@ jobs:
           NODE_ENV: production
           REGION: us-east-1
           STACK_NAME: backend-production-github-oauth
-          STACK_OWNER_ARN: ${{ secrets.STACK_OWNER_ARN}}
+          STACK_ROLE_ARN: ${{ secrets.STACK_ROLE_ARN}}
           STAGE: production

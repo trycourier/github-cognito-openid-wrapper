@@ -24,5 +24,6 @@ sam deploy \
   --capabilities CAPABILITY_IAM \
   --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE_NAME" \
   --region "$REGION" \
+  # --role-arn "add role arn here for the cloudformation stack to assume" \
   --stack-name "$STACK_NAME" \
   --template-file "$OUTPUT_TEMPLATE_FILE"
