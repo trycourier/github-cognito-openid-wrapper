@@ -1,9 +1,6 @@
 name: Deploy Github OIDC Shim
 
-on:
-  push:
-    branches:
-      - dd-github-sso
+on: [push]
 
 jobs:
   build:
@@ -23,7 +20,8 @@ jobs:
         run: npm install
       - name: Test and Build
         run: npm run build-dist
-      - name: Deploy to AWS
+      - name: Deploy to AWS (master-only)
+        if: github.ref == 'refs/heads/master'
         uses: apex/actions/aws/sam@master
         with:
           args: |
@@ -34,7 +32,7 @@ jobs:
               --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE" \
               --region "$REGION" \
               --stack-name "$STACK_NAME" \
-              --tags stackOwnerArn="$STACK_OWNER_ARN" \
+              --tags githubSsoOwnerArn="$STACK_OWNER_ARN" \
               --template-file "$OUTPUT_TEMPLATE_FILE"
         env:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
