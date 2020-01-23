@@ -21,7 +21,7 @@ jobs:
       - name: Test and Build
         run: npm run build-dist
       - name: Deploy to AWS (master-only)
-        # if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         uses: apex/actions/aws/sam@master
         with:
           args: |
@@ -33,7 +33,7 @@ jobs:
               --region "$REGION" \
               --role-arn "$STACK_ROLE_ARN" \
               --stack-name "$STACK_NAME" \
-              --tags githubSsoOwnerArn="$STACK_ROLE_ARN" \
+              --tags githubSsoRoleArn="$STACK_ROLE_ARN" \
               --template-file "$OUTPUT_TEMPLATE_FILE"
         env:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
