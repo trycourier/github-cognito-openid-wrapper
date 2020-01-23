@@ -45,6 +45,6 @@ jobs:
           OUTPUT_TEMPLATE_FILE: serverless-output.yml
           NODE_ENV: production
           REGION: us-east-1
-          STACK_NAME: backend-production-github-oauth
+          STACK_NAME: ${{ secrets.STACK_NAME }}
           STACK_ROLE_ARN: ${{ secrets.STACK_ROLE_ARN}}
           STAGE: production
