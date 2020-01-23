@@ -2,7 +2,7 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 
 const baseConfig = {
-  mode: 'production',
+  mode: process.env.NODE_ENV,
   target: 'node',
   devtool: 'source-map',
   module: {
