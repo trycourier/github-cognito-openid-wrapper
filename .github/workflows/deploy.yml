@@ -25,7 +25,10 @@ jobs:
         uses: apex/actions/aws/sam@master
         with:
           args: |
+            ls -al .
+            "/usr/local/bin/aws" s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
             sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
+            ls -al .
             sam deploy \
               --capabilities CAPABILITY_IAM \
               --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE" \
