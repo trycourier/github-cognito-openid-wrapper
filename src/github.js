@@ -2,7 +2,6 @@ const axios = require('axios');
 const {
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
-  COGNITO_REDIRECT_URI,
   GITHUB_API_URL,
   GITHUB_LOGIN_URL
 } = require('./config');
@@ -51,19 +50,20 @@ const gitHubGet = (url, accessToken) =>
 module.exports = (apiBaseUrl, loginBaseUrl) => {
   const urls = getApiEndpoints(apiBaseUrl, loginBaseUrl || apiBaseUrl);
   return {
-    getAuthorizeUrl: (client_id, scope, state, response_type) =>
-      `${urls.oauthAuthorize}?client_id=${client_id}&scope=${encodeURIComponent(
+    getAuthorizeUrl: (client_id, scope, stateId, response_type) =>
+      `${urls.oauthAuthorize}?client_id=${client_id}&state=${stateId}&scope=${encodeURIComponent(
         scope
-      )}&state=${state}&response_type=${response_type}`,
+      )}&response_type=${response_type}`
+    ,
     getUserDetails: accessToken =>
       gitHubGet(urls.userDetails, accessToken).then(check),
     getUserEmails: accessToken =>
       gitHubGet(urls.userEmails, accessToken).then(check),
-    getToken: (code, state) => {
+    getToken: (code, state, redirectUri) => {
       const data = {
         // OAuth required fields
         grant_type: 'authorization_code',
-        redirect_uri: COGNITO_REDIRECT_URI,
+        redirect_uri: redirectUri,
         client_id: GITHUB_CLIENT_ID,
         // GitHub Specific
         response_type: 'code',
@@ -79,6 +79,7 @@ module.exports = (apiBaseUrl, loginBaseUrl) => {
         data,
         {}
       );
+
       return axios({
         method: 'post',
         url: urls.oauthToken,

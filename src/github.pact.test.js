@@ -4,6 +4,7 @@ const github = require('./github');
 
 jest.mock('./config', () => ({
   COGNITO_REDIRECT_URI: 'COGNITO_REDIRECT_URI',
+  DYNAMODB_STATE_TABLE: 'DYNAMODB_STATE_TABLE',
   GITHUB_CLIENT_SECRET: 'GITHUB_CLIENT_SECRET',
   GITHUB_CLIENT_ID: 'GITHUB_CLIENT_ID',
   GITHUB_API_URL: 'GITHUB_API_URL',
@@ -237,7 +238,7 @@ describe('With an increased jasmine timeout', () => {
               'response_type'
             )
           ).to.equal(
-            `${PACT_BASE_URL}/login/oauth/authorize?client_id=client_id&scope=scope&state=state&response_type=response_type`
+            `${PACT_BASE_URL}/login/oauth/authorize?client_id=client_id&state=state&scope=scope&response_type=response_type`
           );
         });
       });
@@ -256,7 +257,7 @@ describe('With an increased jasmine timeout', () => {
           body: {
             // OAuth required fields
             grant_type: 'authorization_code',
-            redirect_uri: 'COGNITO_REDIRECT_URI',
+            redirect_uri: 'CALLBACK_REDIRECT_URI',
             client_id: 'GITHUB_CLIENT_ID',
             // GitHub Specific
             response_type: 'code',
@@ -290,8 +291,9 @@ describe('With an increased jasmine timeout', () => {
         // add expectations
         it('returns a sucessful body', done =>
           github(PACT_BASE_URL)
-            .getToken('SOME_CODE')
+            .getToken('SOME_CODE', null, 'CALLBACK_REDIRECT_URI')
             .then(response => {
+              // eslint-disable-next-line no-console
               expect(response).toEqual(EXPECTED_BODY);
               done();
             }));
@@ -319,7 +321,7 @@ describe('With an increased jasmine timeout', () => {
         // add expectations
         it('rejects the promise', done => {
           github(PACT_BASE_URL)
-            .getToken('SOME_CODE')
+            .getToken('SOME_CODE', null, 'CALLBACK_REDIRECT_URI')
             .catch(() => {
               done();
             });
@@ -348,7 +350,7 @@ describe('With an increased jasmine timeout', () => {
         // add expectations
         it('rejects the promise', done => {
           github(PACT_BASE_URL)
-            .getToken('SOME_CODE')
+            .getToken('SOME_CODE', null, 'CALLBACK_REDIRECT_URI')
             .catch(() => {
               done();
             });

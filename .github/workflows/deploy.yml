@@ -1,0 +1,50 @@
+name: Deploy Github OIDC Shim
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: npm install
+      - name: Test and Build
+        run: npm run build-dist
+      - name: Deploy to AWS (master-only)
+        if: github.ref == 'refs/heads/master'
+        uses: apex/actions/aws/sam@master
+        with:
+          args: |
+            "/usr/local/bin/aws" s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
+            sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
+            sam deploy \
+              --capabilities CAPABILITY_IAM \
+              --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE" \
+              --region "$REGION" \
+              --role-arn "$STACK_ROLE_ARN" \
+              --stack-name "$STACK_NAME" \
+              --tags githubSsoRoleArn="$STACK_ROLE_ARN" \
+              --template-file "$OUTPUT_TEMPLATE_FILE"
+        env:
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          COGNITO_REDIRECT_URI: ${{ secrets.COGNITO_REDIRECT_URI }}
+          GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+          OUTPUT_TEMPLATE_FILE: serverless-output.yml
+          NODE_ENV: production
+          REGION: us-east-1
+          STACK_NAME: ${{ secrets.STACK_NAME }}
+          STACK_ROLE_ARN: ${{ secrets.STACK_ROLE_ARN}}
+          STAGE: production

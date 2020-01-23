@@ -139,14 +139,14 @@ describe('openid domain layer', () => {
     beforeEach(() => {
       githubMock.getAuthorizeUrl.mockImplementation(
         (client_id, scope, state, response_type) =>
-          `https://not-a-real-host.com/authorize?client_id=${client_id}&scope=${scope}&state=${state}&response_type=${response_type}`
+          `https://not-a-real-host.com/authorize?client_id=${client_id}&state=${state}&scope=${scope}&response_type=${response_type}`
       );
     });
     it('Redirects to the authorization URL', () => {
       expect(
         openid.getAuthorizeUrl('client_id', 'scope', 'state', 'response_type')
       ).to.equal(
-        'https://not-a-real-host.com/authorize?client_id=client_id&scope=scope&state=state&response_type=response_type'
+        'https://not-a-real-host.com/authorize?client_id=client_id&state=state&scope=scope&response_type=response_type'
       );
     });
   });
