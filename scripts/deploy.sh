@@ -22,7 +22,7 @@ aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
 sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
 sam deploy \
   --capabilities CAPABILITY_IAM \
-  --parameter-overrides GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" StageNameParameter="$STAGE_NAME" \
+  --parameter-overrides CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" LambdaProvisionedConcurrentExecutions=$LAMBDA_PROVISIONED_CONCURRENT_EXECUTIONS StageNameParameter="$STAGE_NAME" \
   --region "$REGION" \
   --stack-name "$STACK_NAME" \
   --template-file "$OUTPUT_TEMPLATE_FILE"
