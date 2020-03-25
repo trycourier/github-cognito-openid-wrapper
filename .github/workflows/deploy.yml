@@ -40,6 +40,7 @@ jobs:
         env:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_KMS_KEY_ID: ${{ secrets.AWS_KMS_KEY_ID }}
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           COGNITO_REDIRECT_URI: ${{ secrets.COGNITO_REDIRECT_URI }}
           GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
