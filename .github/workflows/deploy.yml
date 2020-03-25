@@ -27,8 +27,10 @@ jobs:
           args: |
             ls -al .
             sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
+            echo "packaged successfully!"
             sam deploy \
               --capabilities CAPABILITY_IAM \
+              --debug TRUE \
               --parameter-overrides CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" LambdaProvisionedConcurrentExecutions=$LAMBDA_PROVISIONED_CONCURRENT_EXECUTIONS StageNameParameter="$STAGE" \
               --region "$REGION" \
               --role-arn "$STACK_ROLE_ARN" \

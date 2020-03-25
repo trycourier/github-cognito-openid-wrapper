@@ -19,9 +19,11 @@ source ./config.sh
 
 OUTPUT_TEMPLATE_FILE="$PROJECT_ROOT/serverless-output.yml"
 aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
+echo "packaged successfully!"
 sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
 sam deploy \
   --capabilities CAPABILITY_IAM \
+  --debug TRUE \
   --parameter-overrides CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" LambdaProvisionedConcurrentExecutions=$LAMBDA_PROVISIONED_CONCURRENT_EXECUTIONS StageNameParameter="$STAGE_NAME" \
   --region "$REGION" \
   --stack-name "$STACK_NAME" \
