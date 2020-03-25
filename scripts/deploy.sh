@@ -20,7 +20,10 @@ source ./config.sh
 OUTPUT_TEMPLATE_FILE="$PROJECT_ROOT/serverless-output.yml"
 aws s3 mb "s3://$BUCKET_NAME" --region "$REGION" || true
 echo "packaged successfully!"
+
+# note if encryption is turned on in s3, you will also need to pass in --kms-key-id below:
 sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE"  --s3-bucket "$BUCKET_NAME"
+
 sam deploy \
   --capabilities CAPABILITY_IAM \
   --debug TRUE \
