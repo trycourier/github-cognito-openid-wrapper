@@ -31,7 +31,7 @@ jobs:
             sam deploy \
               --capabilities CAPABILITY_IAM \
               --debug TRUE \
-              --parameter-overrides CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" LambdaProvisionedConcurrentExecutions=$LAMBDA_PROVISIONED_CONCURRENT_EXECUTIONS StageNameParameter="$STAGE" \
+              --parameter-overrides CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" StageNameParameter="$STAGE" \
               --region "$REGION" \
               --role-arn "$STACK_ROLE_ARN" \
               --stack-name "$STACK_NAME" \
@@ -44,7 +44,6 @@ jobs:
           COGNITO_REDIRECT_URI: ${{ secrets.COGNITO_REDIRECT_URI }}
           GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
           GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
-          LAMBDA_PROVISIONED_CONCURRENT_EXECUTIONS: 1
           OUTPUT_TEMPLATE_FILE: serverless-output.yml
           NODE_ENV: production
           REGION: us-east-1

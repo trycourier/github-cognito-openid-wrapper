@@ -36,8 +36,6 @@ Parameters:
     Type: String
     Default: "https://api.github.com"
     MinLength: 1
-  LambdaProvisionedConcurrentExecutions:
-    Type: Number
   StageNameParameter:
     Type: String
 
@@ -74,11 +72,7 @@ Resources:
             Path: /.well-known/openid-configuration
             Method: get
             RestApiId: !Ref GithubOAuthApi
-      AutoPublishAlias: live
-      DeploymentPreference:
-        Type: AllAtOnce
-      ProvisionedConcurrencyConfig:
-        ProvisionedConcurrentExecutions: !Ref LambdaProvisionedConcurrentExecutions
+
 
   Authorize:
     Type: AWS::Serverless::Function
@@ -100,11 +94,7 @@ Resources:
           DYNAMODB_STATE_TABLE:
             Ref: CognitoStatesTable
           REGION: !Ref "AWS::Region"
-      AutoPublishAlias: live
-      DeploymentPreference:
-        Type: AllAtOnce
-      ProvisionedConcurrencyConfig:
-        ProvisionedConcurrentExecutions: !Ref LambdaProvisionedConcurrentExecutions
+
 
   Token:
     Type: AWS::Serverless::Function
@@ -124,11 +114,6 @@ Resources:
             Path: /token
             Method: post
             RestApiId: !Ref GithubOAuthApi
-      AutoPublishAlias: live
-      ProvisionedConcurrencyConfig:
-        ProvisionedConcurrentExecutions: !Ref LambdaProvisionedConcurrentExecutions
-      DeploymentPreference:
-        Type: AllAtOnce
 
   UserInfo:
     Type: AWS::Serverless::Function
@@ -148,11 +133,6 @@ Resources:
             Path: /userinfo
             Method: post
             RestApiId: !Ref GithubOAuthApi
-      AutoPublishAlias: live
-      ProvisionedConcurrencyConfig:
-        ProvisionedConcurrentExecutions: !Ref LambdaProvisionedConcurrentExecutions
-      DeploymentPreference:
-        Type: AllAtOnce
 
   Jwks:
     Type: AWS::Serverless::Function
@@ -166,11 +146,6 @@ Resources:
             Path: /.well-known/jwks.json
             Method: get
             RestApiId: !Ref GithubOAuthApi
-      AutoPublishAlias: live
-      DeploymentPreference:
-        Type: AllAtOnce
-      ProvisionedConcurrencyConfig:
-        ProvisionedConcurrentExecutions: !Ref LambdaProvisionedConcurrentExecutions
 
   Callback:
     Type: AWS::Serverless::Function
@@ -192,11 +167,7 @@ Resources:
           DYNAMODB_STATE_TABLE:
             Ref: CognitoStatesTable
           REGION: !Ref "AWS::Region"
-      AutoPublishAlias: live
-      DeploymentPreference:
-        Type: AllAtOnce
-      ProvisionedConcurrencyConfig:
-        ProvisionedConcurrentExecutions: !Ref LambdaProvisionedConcurrentExecutions
+
 
 Outputs:
   GitHubShimIssuer:
