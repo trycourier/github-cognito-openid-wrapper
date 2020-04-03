@@ -22,7 +22,8 @@ jobs:
         run: npm run build-dist
       - name: Verify aws-sam-cli version
         uses: apex/actions/aws/sam@master
-        run:  sam --version
+        with:
+          args: sam --version
       - name: Deploy to AWS (master-only)
         if: github.ref == 'refs/heads/master'
         uses: apex/actions/aws/sam@master
