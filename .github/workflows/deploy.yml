@@ -23,7 +23,9 @@ jobs:
       - name: Verify aws-sam-cli version
         uses: apex/actions/aws/sam@master
         with:
-          args: sam --version
+          args: |
+            ls -al .
+            sam --version
       - name: Deploy to AWS (master-only)
         if: github.ref == 'refs/heads/master'
         uses: apex/actions/aws/sam@master
