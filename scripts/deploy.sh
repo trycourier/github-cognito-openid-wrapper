@@ -25,7 +25,7 @@ sam package --template-file template.yml --output-template-file "$OUTPUT_TEMPLAT
 sam deploy \
   --capabilities CAPABILITY_IAM \
   --debug TRUE \
-  --parameter-overrides CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" LambdaProvisionedConcurrentExecutions=$LAMBDA_PROVISIONED_CONCURRENT_EXECUTIONS StageNameParameter="$STAGE_NAME" \
+  --parameter-overrides CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" StageNameParameter="$STAGE_NAME" \
   --region "$REGION" \
   --stack-name "$STACK_NAME" \
   --template-file "$OUTPUT_TEMPLATE_FILE"
