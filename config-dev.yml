@@ -1,4 +1,0 @@
-AWS_USER_POOL_ID: "us-east-1_2FlGT7wgW"
-COGNITO_REDIRECT_URI: "https://courier-dev-730438017227.auth.us-east-1.amazoncognito.com/oauth2/idpresponse"
-GITHUB_CLIENT_ID: "0f37273ba14143d1ab8c"
-GITHUB_CLIENT_SECRET: "bac3f895c5ba6aec2dd3a8cb4e2b22e036bcc7be"
