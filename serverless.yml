@@ -34,19 +34,18 @@ provider:
 
 custom:
   awsUserPoolId: ${env:AWS_USER_POOL_ID, file(./config-dev.yml):AWS_USER_POOL_ID}
-  # awsGithubSsoGatewayUri: ${AWS_GITHUB_GATEWAY_URI}, file(./config-dev.yml)}
-  awsGithubSsoGatewayUri: "https://f48w5i7gcl.execute-api.${self:provider.region}.amazonaws.com/${self:custom.stage}"
-    # Fn::Join:
-    #   - ""
-    #   - - "https://"
-    #     - Ref: ApiGatewayRestApi #- "f48w5i7gcl"
-    #     - ".execute-api.${self:provider.region}.amazonaws.com/${self:custom.stage}"
+  awsGithubSsoGatewayUri:
+    Fn::Join:
+      - ""
+      - - "https://"
+        - Ref: ApiGatewayRestApi
+        - .execute-api.${self:provider.region}.amazonaws.com/${self:custom.stage}
   githubClientId: ${env:GITHUB_CLIENT_ID, file(./config-dev.yml):GITHUB_CLIENT_ID}
   githubClientSecret: ${env:GITHUB_CLIENT_SECRET, file(./config-dev.yml):GITHUB_CLIENT_SECRET}
   lambda:
     provisionedConcurrency:
       production: 1
-      dev: 1
+      dev: 0
   stage: ${opt:stage, self:provider.stage}
   webpack:
     webpackConfig: 'webpack.config.serverless.js'
