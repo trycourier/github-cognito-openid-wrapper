@@ -71,27 +71,18 @@ You will need to:
 - Install the `aws-cli`:
   - `aws` ([install instructions](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)) and configured
 - Run `aws configure` and set appropriate access keys,
-- Set environment variables in your `config-dev.yml`:
-      AWS_USER_POOL_ID: "us-east-1_##########." (use correct region)
-      COGNITO_REDIRECT_URI: "https://##########.auth.us-east-1.amazoncognito.com/oauth2/idpresponse"
-      GITHUB_CLIENT_ID: ##########."
-      GITHUB_CLIENT_SECRET: ##########."
+- Rename example configuration .env file: `mv ./.env.development.example ./.env.development`
+- Set values for environment variables in your `.env.development`
 - Run `npm install` and `npm run deploy`
 
 ### 3: Finalise Cognito configuration
-- Ensure that your new provider is enabled under **Enabled Identity Providers** on the App Client Settings screen under App Integration.
+- Ensure that your new provider is enabled under **Enabled Identity Providers** on the `App Client Settings` screen under App Integration.
 
 That's it! If you need to redeploy the lambda/API gateway solution, all you need to do is run `npm run deploy` again.
 
 ### Logging
 
-This shim also supports logging with Winston. By default, all logging goes to
-STDOUT. Beware that if you set the log level to DEBUG, then sensitive user
-information may be logged.
-
-If you're using the node server, you can also use Splunk for logging.
-Environment variables configuring splunk are commented in `example-config.sh`. The Splunk HEC URL and access
-token are required, and you can also set the source, sourcetype & index for all logged events.
+This shim also supports logging with Winston. By default, all logging goes to STDOUT. Beware that if you set the log level to DEBUG, then sensitive user information may be logged.
 
 ## The details
 

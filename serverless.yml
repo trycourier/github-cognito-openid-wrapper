@@ -2,6 +2,7 @@ service: github-sso
 
 plugins:
   - serverless-webpack
+  - serverless-dotenv-plugin
 
 package:
   exclude:
@@ -60,7 +61,7 @@ functions:
           cors: true
     environment:
       DYNAMODB_STATE_TABLE: !Ref CognitoStatesTable
-      REGION: !Ref "AWS::Region"
+      REGION: ${self:provider.region}
     provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:custom.stage}}
   callback:
     handler: src/connectors/lambda/callback.handler
@@ -71,7 +72,7 @@ functions:
           cors: true
     environment:
       DYNAMODB_STATE_TABLE: !Ref CognitoStatesTable
-      REGION: !Ref "AWS::Region"
+      REGION: ${self:provider.region}
     provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:custom.stage}}
   getOpenIdConfiguration:
     handler: src/connectors/lambda/open-id-configuration.handler
