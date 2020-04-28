@@ -1,5 +1,3 @@
-
-
 const slsw = require('serverless-webpack');
 const path = require('path');
 
