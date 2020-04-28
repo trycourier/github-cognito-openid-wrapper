@@ -47,7 +47,6 @@ custom:
   lambda:
     provisionedConcurrency:
       production: 1
-      frog: 1
       dev: 0
   stage: ${opt:stage, self:provider.stage}
   webpack:
