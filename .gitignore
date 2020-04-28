@@ -16,9 +16,3 @@ package-lock.json
 .webpack
 
 npm-debug*
-
-# vim
-*.sw[op]
-
-# sensitive/environment information
-*-secrets.*
