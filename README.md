@@ -38,8 +38,8 @@ The project implements everything needed by the [OIDC User Pool IdP authenticati
 It implements the following endpoints from the
 [OpenID Connect Core Spec](https://openid.net/specs/openid-connect-core-1_0.html):
 
-- Authorization - used to start the authorisation process ([spec](https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint))
-- Token - used to exchange an authorisation code for an access and ID token ([spec](https://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint))
+- Authorization - used to start the authorization process ([spec](https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint))
+- Token - used to exchange an authorization code for an access and ID token ([spec](https://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint))
 - UserInfo - used to exchange an access token for information about the user ([spec](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo))
 - jwks - used to describe the keys used to sign ID tokens ([implied by spec](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata))
 
@@ -104,14 +104,14 @@ There are two important concepts for identity federation:
 
 #### OAuth
 
-[OAuth2.0](https://tools.ietf.org/html/rfc6749) is an _authorisation_ framework,
+[OAuth2.0](https://tools.ietf.org/html/rfc6749) is an _authorization_ framework,
 used for determining whether a user is allowed to access a resource (like
 private user profile data). In order to do this, it's usually necessary for
-_authentication_ of the user to happen before authorisation.
+_authentication_ of the user to happen before authorization.
 
-This means that most OAuth2.0 implementations (including GitHub) [include authentication in a step of the authorisation process](https://medium.com/@darutk/new-architecture-of-oauth-2-0-and-openid-connect-implementation-18f408f9338d).
+This means that most OAuth2.0 implementations (including GitHub) [include authentication in a step of the authorization process](https://medium.com/@darutk/new-architecture-of-oauth-2-0-and-openid-connect-implementation-18f408f9338d).
 For all practical purposes, most OAuth2.0 implementations (including GitHub)can
-be thought of as providing both authorisation and authentication.
+be thought of as providing both authorization and authentication.
 
 Below is a diagram of the authentication code flow for OAuth:
 
