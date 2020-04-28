@@ -11,7 +11,7 @@ package:
 
 provider:
   environment:
-    COGNITO_REDIRECT_URI: ${env:COGNITO_REDIRECT_URI, file(./config-dev.yml):COGNITO_REDIRECT_URI}
+    COGNITO_REDIRECT_URI: ${env:COGNITO_REDIRECT_URI}
     GITHUB_CLIENT_ID: ${self:custom.githubClientId}
     GITHUB_CLIENT_SECRET: ${self:custom.githubClientSecret}
     GITHUB_LOGIN_URL: "https://github.com"
@@ -34,15 +34,15 @@ provider:
   stage: dev
 
 custom:
-  awsUserPoolId: ${env:AWS_USER_POOL_ID, file(./config-dev.yml):AWS_USER_POOL_ID}
+  awsUserPoolId: ${env:AWS_USER_POOL_ID}
   awsGithubSsoGatewayUri:
     Fn::Join:
       - ""
       - - "https://"
         - Ref: ApiGatewayRestApi
         - .execute-api.${self:provider.region}.amazonaws.com/${self:custom.stage}
-  githubClientId: ${env:GITHUB_CLIENT_ID, file(./config-dev.yml):GITHUB_CLIENT_ID}
-  githubClientSecret: ${env:GITHUB_CLIENT_SECRET, file(./config-dev.yml):GITHUB_CLIENT_SECRET}
+  githubClientId: ${env:GITHUB_CLIENT_ID}
+  githubClientSecret: ${env:GITHUB_CLIENT_SECRET}
   lambda:
     provisionedConcurrency:
       production: 1
