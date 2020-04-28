@@ -60,11 +60,9 @@ should be cheap to host and run.
 
 You will need to:
 
-- Create a Cognito User Pool ([instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pool-as-user-directory.html)).
-- Configure App Integration for your User Pool ([instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-configuring-app-integration.html)). Note down the domain name.
-- Create a GitHub OAuth App ([instructions](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/), with the following settings:
+  - Create a GitHub OAuth App ([instructions](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/), with the following settings:
   - Authorization callback URL: `https://<Your Cognito Domain>/oauth2/idpresponse`
-  - Note down the Client ID and secret
+  - Note the Github Client ID and Secret
 
 ### 2: Deployment with Lambda and API Gateway
 
@@ -72,7 +70,7 @@ You will need to:
   - `aws` ([install instructions](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)) and configured
 - Run `aws configure` and set appropriate access keys,
 - Rename example configuration .env file: `mv ./.env.development.example ./.env.development`
-- Set values for environment variables in your `.env.development`
+- Set values for environment variables in your `.env.development` (see examples in the file)
 - Run `npm install` and `npm run deploy`
 
 ### 3: Finalise Cognito configuration
