@@ -73,7 +73,6 @@ Resources:
             Method: get
             RestApiId: !Ref GithubOAuthApi
 
-
   Authorize:
     Type: AWS::Serverless::Function
     Properties:
