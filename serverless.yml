@@ -47,7 +47,6 @@ custom:
   lambda:
     provisionedConcurrency:
       production: 1
-      tony: 0
       dev: 0
   webpack:
     webpackConfig: 'webpack.config.serverless.js'
