@@ -71,12 +71,12 @@ You will need to:
 - Run `aws configure` and set appropriate access keys,
 - Rename example configuration .env file: `mv ./.env.development.example ./.env.development`
 - Set values for environment variables in your `.env.development` (see examples in the file)
-- Run `npm install` and `npm run deploy`
+- Run `yarn install` and `yarn run deploy`
 
 ### 3: Finalise Cognito configuration
 - Ensure that your new provider is enabled under **Enabled Identity Providers** on the `App Client Settings` screen under App Integration.
 
-That's it! If you need to redeploy the lambda/API gateway solution, all you need to do is run `npm run deploy` again.
+That's it! If you need to redeploy the lambda/API gateway solution, all you need to do is run `yarn run deploy` again.
 
 ### Logging
 
@@ -151,7 +151,7 @@ You can compare this workflow to the documented Cognito workflow [here](https://
     ├── dist-web            # Dist folder for web server deployment
     └-- dist-lambda         # Dist folder for lambda deployment
 
-#### npm targets
+#### yarn targets
 
 - `build` and `build-dist`: create packages in the `dist-lambda` folder (for the lambda
   deployment) and the `dist-web` folder (for the node web server).
@@ -165,8 +165,8 @@ You can compare this workflow to the documented Cognito workflow [here](https://
 #### Scripts
 
 - `scripts/create-key.sh`: If the private key is missing, generate a new one.
-  This is run as a preinstall script before `npm install`
-- `scripts/deploy.sh`: This is the deploy part of `npm run deploy`. It uploads
+  This is run as a preinstall script before `yarn install`
+- `scripts/deploy.sh`: This is the deploy part of `yarn run deploy`. It uploads
   the dist folder to S3, and then creates the cloudformation stack that contains
   the API gateway and lambdas
 
@@ -181,7 +181,7 @@ in `src/github.pact.test.js`. There is currently no provider validation performe
 #### Private key
 
 The private key used to make ID tokens is stored in `./jwtRS256.key` once
-`scripts/create-key.sh` is run (either manually, or as part of `npm install`).
+`scripts/create-key.sh` is run (either manually, or as part of `yarn install`).
 You may optionally replace it with your own key - if you do this, you will need
 to redeploy.
 
