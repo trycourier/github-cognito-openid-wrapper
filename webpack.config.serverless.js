@@ -1,0 +1,29 @@
+const slsw = require('serverless-webpack');
+const path = require('path');
+
+module.exports = {
+  entry: slsw.lib.entries,
+  externals: ['aws-sdk'],
+  target: 'node',
+  mode: slsw.lib.options.stage === 'dev' ? 'development' : 'production',
+  module: {
+    rules: [{
+      test: /\.js$/,
+      loaders: ['babel-loader']
+    },
+    {
+      test: /\.(key|key.pub)$/,
+      use: [
+        {
+          loader: 'raw-loader'
+        }
+      ]
+    },
+    ],
+  },
+  output: {
+    libraryTarget: 'commonjs',
+    path: path.join(__dirname, '.webpack'),
+    filename: '[name].js'
+  },
+};

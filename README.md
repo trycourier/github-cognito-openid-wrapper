@@ -38,8 +38,8 @@ The project implements everything needed by the [OIDC User Pool IdP authenticati
 It implements the following endpoints from the
 [OpenID Connect Core Spec](https://openid.net/specs/openid-connect-core-1_0.html):
 
-- Authorization - used to start the authorisation process ([spec](https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint))
-- Token - used to exchange an authorisation code for an access and ID token ([spec](https://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint))
+- Authorization - used to start the authorization process ([spec](https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint))
+- Token - used to exchange an authorization code for an access and ID token ([spec](https://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint))
 - UserInfo - used to exchange an access token for information about the user ([spec](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo))
 - jwks - used to describe the keys used to sign ID tokens ([implied by spec](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata))
 
@@ -56,86 +56,31 @@ This project is intended to be deployed as a series of lambda functions alongsid
 an API Gateway. This means it's easy to use in conjunction with Cognito, and
 should be cheap to host and run.
 
-You can also deploy it as a http server running as a node app. This is useful
-for testing, exposing it to Cognito using something like [ngrok](https://ngrok.com/).
-
 ### 1: Setup
 
 You will need to:
 
-- Create a Cognito User Pool ([instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pool-as-user-directory.html)).
-- Configure App Integration for your User Pool ([instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-configuring-app-integration.html)). Note down the domain name.
-- Create a GitHub OAuth App ([instructions](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/), with the following settings:
+  - Create a GitHub OAuth App ([instructions](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/), with the following settings:
   - Authorization callback URL: `https://<Your Cognito Domain>/oauth2/idpresponse`
-  - Note down the Client ID and secret
+  - Note the Github Client ID and Secret
 
-(If you use GitHub Enterprise, you need the API & Login URL. This is usually `https://<GitHub Enterprise Host>/api/v3` and `https://<GitHub Enterprise Host>`.)
+### 2: Deployment with Lambda and API Gateway
 
-Next you need to decide if you'd like to deploy with lambda/API Gateway (follow Step 2a), or as a node server (follow Step 2b)
-
-### 2a: Deployment with lambda and API Gateway
-
-- Install the `aws` and `sam` CLIs from AWS:
-
+- Install the `aws-cli`:
   - `aws` ([install instructions](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)) and configured
-  - `sam` ([install instructions](https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html))
-
-- Run `aws configure` and set appropriate access keys etc
-- Set environment variables for the OAuth App client/secret, callback url, stack name, etc:
-
-       cp example-config.sh config.sh
-       vim config.sh # Or whatever your favourite editor is
-
-- Run `npm install` and `npm run deploy`
-- Note down the DNS of the deployed API Gateway (available in the AWS console).
-
-### 2b: Running the node server
-
-- Set environment variables for the OAuth App client/secret, callback url, and
-  port to run the server on:
-
-       cp example-config.sh config.sh
-       vim config.sh # Or whatever your favourite editor is
-
-- Source the config file:
-
-```
-  source config.sh
-```
-
-- Run `npm run start` to fire up an auto-refreshing development build of the
-  server (production deployment is out of scope for this repository, but you can expose it using something like [ngrok](https://ngrok.com/) for easy development and testing with Cognito).
+- Run `aws configure` and set appropriate access keys,
+- Rename example configuration .env file: `mv ./.env.development.example ./.env.development`
+- Set values for environment variables in your `.env.development` (see examples in the file)
+- Run `yarn install` and `yarn run deploy`
 
 ### 3: Finalise Cognito configuration
+- Ensure that your new provider is enabled under **Enabled Identity Providers** on the `App Client Settings` screen under App Integration.
 
-- Configure the OIDC integration in AWS console for Cognito (described below, but following [these instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-oidc-idp.html)). The following settings are required:
-  - Client ID: The GitHub Client ID above
-  - Authorize scope: `openid read:user user:email`
-  - Issuer: `https://<Your API Gateway DNS name>/${Stage_Name}` or `https://<your webserver>/` (for the node server).
-  - If you have deployed the web app: Run discovery (big blue button next to Issuer).
-  - If you have deployed the lambda/Gateway: For some reason, Cognito is unable to
-    do OpenID Discovery. You will need to configure the endpoints manually. They are:
-    - Authorization endpoint: `https://<Your API Gateway DNS name>/${Stage_Name}/authorize`
-    - Token endpoint: `https://<Your API Gateway DNS name>/${Stage_Name}/token`
-    - Userinfo endpoint: `https://<Your API Gateway DNS name>/${Stage_Name}/userinfo`
-    - JWKS uri: `https://<Your API Gateway DNS name>/${Stage_Name}/.well-known/jwks.json`
-- Configure the Attribute Mapping in the AWS console:
-
-![Attribute mapping](docs/attribute-mapping.png)
-
-- Ensure that your new provider is enabled under **Enabled Identity Providers** on the App Client Settings screen under App Integration.
-
-That's it! If you need to redeploy the lambda/API gateway solution, all you need to do is run `npm run deploy` again.
+That's it! If you need to redeploy the lambda/API gateway solution, all you need to do is run `yarn run deploy` again.
 
 ### Logging
 
-This shim also supports logging with Winston. By default, all logging goes to
-STDOUT. Beware that if you set the log level to DEBUG, then sensitive user
-information may be logged.
-
-If you're using the node server, you can also use Splunk for logging.
-Environment variables configuring splunk are commented in `example-config.sh`. The Splunk HEC URL and access
-token are required, and you can also set the source, sourcetype & index for all logged events.
+This shim also supports logging with Winston. By default, all logging goes to STDOUT. Beware that if you set the log level to DEBUG, then sensitive user information may be logged.
 
 ## The details
 
@@ -144,18 +89,18 @@ token are required, and you can also set the source, sourcetype & index for all 
 There are two important concepts for identity federation:
 
 - Authentication: Is this user who they say they are?
-- Authorisation: Is the user allowed to use a particular resource?
+- Authorization: Is the user allowed to use a particular resource?
 
 #### OAuth
 
-[OAuth2.0](https://tools.ietf.org/html/rfc6749) is an _authorisation_ framework,
+[OAuth2.0](https://tools.ietf.org/html/rfc6749) is an _authorization_ framework,
 used for determining whether a user is allowed to access a resource (like
 private user profile data). In order to do this, it's usually necessary for
-_authentication_ of the user to happen before authorisation.
+_authentication_ of the user to happen before authorization.
 
-This means that most OAuth2.0 implementations (including GitHub) [include authentication in a step of the authorisation process](https://medium.com/@darutk/new-architecture-of-oauth-2-0-and-openid-connect-implementation-18f408f9338d).
+This means that most OAuth2.0 implementations (including GitHub) [include authentication in a step of the authorization process](https://medium.com/@darutk/new-architecture-of-oauth-2-0-and-openid-connect-implementation-18f408f9338d).
 For all practical purposes, most OAuth2.0 implementations (including GitHub)can
-be thought of as providing both authorisation and authentication.
+be thought of as providing both authorization and authentication.
 
 Below is a diagram of the authentication code flow for OAuth:
 
@@ -206,7 +151,7 @@ You can compare this workflow to the documented Cognito workflow [here](https://
     ├── dist-web            # Dist folder for web server deployment
     └-- dist-lambda         # Dist folder for lambda deployment
 
-#### npm targets
+#### yarn targets
 
 - `build` and `build-dist`: create packages in the `dist-lambda` folder (for the lambda
   deployment) and the `dist-web` folder (for the node web server).
@@ -220,8 +165,8 @@ You can compare this workflow to the documented Cognito workflow [here](https://
 #### Scripts
 
 - `scripts/create-key.sh`: If the private key is missing, generate a new one.
-  This is run as a preinstall script before `npm install`
-- `scripts/deploy.sh`: This is the deploy part of `npm run deploy`. It uploads
+  This is run as a preinstall script before `yarn install`
+- `scripts/deploy.sh`: This is the deploy part of `yarn run deploy`. It uploads
   the dist folder to S3, and then creates the cloudformation stack that contains
   the API gateway and lambdas
 
@@ -236,7 +181,7 @@ in `src/github.pact.test.js`. There is currently no provider validation performe
 #### Private key
 
 The private key used to make ID tokens is stored in `./jwtRS256.key` once
-`scripts/create-key.sh` is run (either manually, or as part of `npm install`).
+`scripts/create-key.sh` is run (either manually, or as part of `yarn install`).
 You may optionally replace it with your own key - if you do this, you will need
 to redeploy.
 

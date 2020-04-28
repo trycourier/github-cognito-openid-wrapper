@@ -36,9 +36,10 @@ module.exports = {
       }
     }),
 
-  getIssuer: (host, stage) => {
-    const lStage = stage;
-    const issuer = `${host}/${lStage}`;
+
+  getIssuer: (host, requestContext) => {
+    const issuerPath = requestContext && requestContext.path.replace(requestContext.resourcePath, '') || '';
+    const issuer = `${host}${issuerPath}`;
     return issuer;
   }
 };

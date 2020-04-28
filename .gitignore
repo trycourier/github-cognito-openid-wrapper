@@ -10,3 +10,12 @@ config.sh
 *.key.pub
 serverless-output.yml
 package-lock.json
+
+# Serverless directories
+.serverless
+.webpack
+
+yarn-debug.log*
+yarn-error.log*
+
+.env.development
