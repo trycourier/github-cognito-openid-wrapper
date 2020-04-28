@@ -13,7 +13,6 @@ Resources:
       }
       ProviderDetails:
         attributes_request_method: POST
-        attributes_url_add_attributes: false
         attributes_url: ${self:custom.awsGithubSsoGatewayUri}/userinfo
         authorize_scopes: "openid read:user user:email"
         authorize_url: ${self:custom.awsGithubSsoGatewayUri}/authorize

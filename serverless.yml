@@ -104,6 +104,12 @@ functions:
           path: /userinfo
           method: get
           cors: true
+      - http:
+          path: /userinfo
+          method: post
+          cors: true
+    environment:
+      GITHUB_API_URL: "https://api.github.com"
 
 resources:
   - ${file(aws-cloudformations/cognito.yml)}

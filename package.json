@@ -11,7 +11,7 @@
     "build": "webpack",
     "build-dist": "npm run build",
     "coverage": "jest --runInBand --coverage",
-    "deploy": "./scripts/deploy.sh",
+    "deploy": "npm run serverless:deploy",
     "lint": "eslint 'src/**' --ext .js",
     "prebuild-dist": "npm run lint && npm run test",
     "predeploy": "npm run build-dist",
