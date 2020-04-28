@@ -28,11 +28,11 @@ provider:
             - ":"
             - Ref: AWS::AccountId
             - ":"
-            - "table/${self:service}-${self:provider.stage}-*"
+            - "table/${self:service}-${self:custom.stage}-*"
   name: aws
   region: us-east-1
   runtime: nodejs10.x
-  stage: ${opt:stage, env:STAGE, "dev"}
+  stage: dev
 
 custom:
   awsUserPoolId: ${env:AWS_USER_POOL_ID}
@@ -41,13 +41,15 @@ custom:
       - ""
       - - "https://"
         - Ref: ApiGatewayRestApi
-        - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}
+        - .execute-api.${self:provider.region}.amazonaws.com/${self:custom.stage}
   githubClientId: ${env:GITHUB_CLIENT_ID}
   githubClientSecret: ${env:GITHUB_CLIENT_SECRET}
   lambda:
     provisionedConcurrency:
       production: 1
+      frog: 1
       dev: 0
+  stage: ${opt:stage, self:provider.stage}
   webpack:
     webpackConfig: 'webpack.config.serverless.js'
 
@@ -62,7 +64,7 @@ functions:
     environment:
       DYNAMODB_STATE_TABLE: !Ref CognitoStatesTable
       REGION: ${self:provider.region}
-    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:provider.stage}}
+    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:custom.stage}}
   callback:
     handler: src/connectors/lambda/callback.handler
     events:
@@ -73,7 +75,7 @@ functions:
     environment:
       DYNAMODB_STATE_TABLE: !Ref CognitoStatesTable
       REGION: ${self:provider.region}
-    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:provider.stage}}
+    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:custom.stage}}
   getOpenIdConfiguration:
     handler: src/connectors/lambda/open-id-configuration.handler
     events:
@@ -81,7 +83,7 @@ functions:
           path: /.well-known/openid-configuration
           method: get
           cors: true
-    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:provider.stage}}
+    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:custom.stage}}
   jwks:
     handler: src/connectors/lambda/jwks.handler
     events:
@@ -93,7 +95,7 @@ functions:
           path: /jwks.json
           method: get
           cors: true
-    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:provider.stage}}
+    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:custom.stage}}
   token:
     handler: src/connectors/lambda/token.handler
     events:
@@ -105,7 +107,7 @@ functions:
           path: /token
           method: post
           cors: true
-    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:provider.stage}}
+    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:custom.stage}}
   userInfo:
     handler: src/connectors/lambda/userinfo.handler
     events:
@@ -119,7 +121,7 @@ functions:
           cors: true
     environment:
       GITHUB_API_URL: "https://api.github.com"
-    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:provider.stage}}
+    provisionedConcurrency: ${self:custom.lambda.provisionedConcurrency.${self:custom.stage}}
 
 resources:
   - ${file(aws-cloudformations/cognito.yml)}
