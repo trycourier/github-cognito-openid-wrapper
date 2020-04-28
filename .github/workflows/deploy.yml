@@ -22,31 +22,14 @@ jobs:
         run: npm run build-dist
       - name: Deploy to AWS (master-only)
         if: github.ref == 'refs/heads/master'
-        uses: apex/actions/aws/sam@master
-        with:
-          args: |
-            ls -al .
-            sam package --debug --template-file template.yml --output-template-file "$OUTPUT_TEMPLATE_FILE" --s3-bucket "$BUCKET_NAME"
-            echo "packaged successfully!"
-            sam deploy \
-              --capabilities CAPABILITY_IAM \
-              --debug TRUE \
-              --parameter-overrides CognitoRedirectUriParameter="$COGNITO_REDIRECT_URI" GitHubClientIdParameter="$GITHUB_CLIENT_ID" GitHubClientSecretParameter="$GITHUB_CLIENT_SECRET" StageNameParameter="$STAGE" \
-              --region "$REGION" \
-              --role-arn "$STACK_ROLE_ARN" \
-              --stack-name "$STACK_NAME" \
-              --tags githubSsoRoleArn="$STACK_ROLE_ARN" \
-              --template-file "$OUTPUT_TEMPLATE_FILE"
+        run: npm run serverless:deploy
         env:
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_USER_POOL_ID: ${{ secrets.AWS_USER_POOL_ID }}
           COGNITO_REDIRECT_URI: ${{ secrets.COGNITO_REDIRECT_URI }}
           GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
           GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
-          OUTPUT_TEMPLATE_FILE: serverless-output.yml
           NODE_ENV: production
           REGION: us-east-1
-          STACK_NAME: ${{ secrets.STACK_NAME }}
-          STACK_ROLE_ARN: ${{ secrets.STACK_ROLE_ARN}}
           STAGE: production
