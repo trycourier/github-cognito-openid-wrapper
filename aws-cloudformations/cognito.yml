@@ -14,12 +14,12 @@ Resources:
       ProviderDetails:
         attributes_request_method: POST
         attributes_url_add_attributes: false
-        attributes_url: ${self:custom.awsGithubSsoGatewayUri}/user
+        attributes_url: ${self:custom.awsGithubSsoGatewayUri}/userinfo
         authorize_scopes: "openid read:user user:email"
-        authorize_url: ${self:custom.awsGithubSsoGatewayUri}/auth
+        authorize_url: ${self:custom.awsGithubSsoGatewayUri}/authorize
         client_id: ${self:custom.githubClientId}
         client_secret: ${self:custom.githubClientSecret}
-        jwks_uri: ${self:custom.awsGithubSsoGatewayUri}/jwt
+        jwks_uri: ${self:custom.awsGithubSsoGatewayUri}/.well-known/jwks.json
         oidc_issuer: ${self:custom.awsGithubSsoGatewayUri}
         token_url: ${self:custom.awsGithubSsoGatewayUri}/token
       ProviderName: "GitHub"
