@@ -56,9 +56,6 @@ This project is intended to be deployed as a series of lambda functions alongsid
 an API Gateway. This means it's easy to use in conjunction with Cognito, and
 should be cheap to host and run.
 
-You can also deploy it as a http server running as a node app. This is useful
-for testing, exposing it to Cognito using something like [ngrok](https://ngrok.com/).
-
 ### 1: Setup
 
 You will need to:
@@ -69,60 +66,19 @@ You will need to:
   - Authorization callback URL: `https://<Your Cognito Domain>/oauth2/idpresponse`
   - Note down the Client ID and secret
 
-(If you use GitHub Enterprise, you need the API & Login URL. This is usually `https://<GitHub Enterprise Host>/api/v3` and `https://<GitHub Enterprise Host>`.)
+### 2: Deployment with Lambda and API Gateway
 
-Next you need to decide if you'd like to deploy with lambda/API Gateway (follow Step 2a), or as a node server (follow Step 2b)
-
-### 2a: Deployment with lambda and API Gateway
-
-- Install the `aws` and `sam` CLIs from AWS:
-
+- Install the `aws-cli`:
   - `aws` ([install instructions](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)) and configured
-  - `sam` ([install instructions](https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html))
-
-- Run `aws configure` and set appropriate access keys etc
-- Set environment variables for the OAuth App client/secret, callback url, stack name, etc:
-
-       cp example-config.sh config.sh
-       vim config.sh # Or whatever your favourite editor is
-
+- Run `aws configure` and set appropriate access keys,
+- Set environment variables in your `config-dev.yml`:
+      AWS_USER_POOL_ID: "us-east-1_##########." (use correct region)
+      COGNITO_REDIRECT_URI: "https://##########.auth.us-east-1.amazoncognito.com/oauth2/idpresponse"
+      GITHUB_CLIENT_ID: ##########."
+      GITHUB_CLIENT_SECRET: ##########."
 - Run `npm install` and `npm run deploy`
-- Note down the DNS of the deployed API Gateway (available in the AWS console).
-
-### 2b: Running the node server
-
-- Set environment variables for the OAuth App client/secret, callback url, and
-  port to run the server on:
-
-       cp example-config.sh config.sh
-       vim config.sh # Or whatever your favourite editor is
-
-- Source the config file:
-
-```
-  source config.sh
-```
-
-- Run `npm run start` to fire up an auto-refreshing development build of the
-  server (production deployment is out of scope for this repository, but you can expose it using something like [ngrok](https://ngrok.com/) for easy development and testing with Cognito).
 
 ### 3: Finalise Cognito configuration
-
-- Configure the OIDC integration in AWS console for Cognito (described below, but following [these instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-oidc-idp.html)). The following settings are required:
-  - Client ID: The GitHub Client ID above
-  - Authorize scope: `openid read:user user:email`
-  - Issuer: `https://<Your API Gateway DNS name>/${Stage_Name}` or `https://<your webserver>/` (for the node server).
-  - If you have deployed the web app: Run discovery (big blue button next to Issuer).
-  - If you have deployed the lambda/Gateway: For some reason, Cognito is unable to
-    do OpenID Discovery. You will need to configure the endpoints manually. They are:
-    - Authorization endpoint: `https://<Your API Gateway DNS name>/${Stage_Name}/authorize`
-    - Token endpoint: `https://<Your API Gateway DNS name>/${Stage_Name}/token`
-    - Userinfo endpoint: `https://<Your API Gateway DNS name>/${Stage_Name}/userinfo`
-    - JWKS uri: `https://<Your API Gateway DNS name>/${Stage_Name}/.well-known/jwks.json`
-- Configure the Attribute Mapping in the AWS console:
-
-![Attribute mapping](docs/attribute-mapping.png)
-
 - Ensure that your new provider is enabled under **Enabled Identity Providers** on the App Client Settings screen under App Integration.
 
 That's it! If you need to redeploy the lambda/API gateway solution, all you need to do is run `npm run deploy` again.
@@ -144,7 +100,7 @@ token are required, and you can also set the source, sourcetype & index for all 
 There are two important concepts for identity federation:
 
 - Authentication: Is this user who they say they are?
-- Authorisation: Is the user allowed to use a particular resource?
+- Authorization: Is the user allowed to use a particular resource?
 
 #### OAuth
 
