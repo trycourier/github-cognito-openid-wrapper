@@ -37,6 +37,6 @@ Resources:
             - ""
             - - ${self:custom.awsGithubSsoGatewayUri}
               - "/token"
-      ProviderName: "GitHub"
+      ProviderName: "Github"
       ProviderType: OIDC
       UserPoolId: ${self:custom.awsUserPoolId}
