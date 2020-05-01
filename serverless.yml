@@ -47,6 +47,7 @@ custom:
   lambda:
     provisionedConcurrency:
       production: 1
+      staging: 0
       dev: 0
   stage: ${opt:stage, self:provider.stage}
   webpack:

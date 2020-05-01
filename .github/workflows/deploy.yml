@@ -20,7 +20,20 @@ jobs:
         run: yarn install
       - name: Test and Build
         run: yarn run build-dist
-      - name: Deploy to AWS (master-only)
+      - name: Deploy to Staging (staging branch only)
+        if: github.ref == 'refs/heads/staging'
+        run: yarn run serverless:deploy --stage $STAGE
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+          AWS_USER_POOL_ID: ${{ secrets.STAGING_AWS_USER_POOL_ID }}
+          COGNITO_REDIRECT_URI: ${{ secrets.STAGING_COGNITO_REDIRECT_URI }}
+          GITHUB_CLIENT_ID: ${{ secrets.STAGING_GITHUB_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.STAGING_GITHUB_CLIENT_SECRET }}
+          NODE_ENV: staging
+          REGION: us-east-1
+          STAGE: staging
+      - name: Deploy to Production (master branch only)
         if: github.ref == 'refs/heads/master'
         run: yarn run serverless:deploy --stage $STAGE
         env:
