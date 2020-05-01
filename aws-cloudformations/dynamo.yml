@@ -12,7 +12,7 @@ Resources:
       TimeToLiveSpecification:
         AttributeName: ttl
         Enabled: true
-    Tags:
+      Tags:
       - Key: VantaOwner
         Value: ${self:custom.vanta.owner}
       - Key: VantaNonProd
