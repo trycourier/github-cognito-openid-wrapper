@@ -1,5 +1,5 @@
 Resources:
-  CognitoStatesTable:
+  ExampleTable:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
@@ -9,15 +9,15 @@ Resources:
         - AttributeName: id
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
-      TimeToLiveSpecification:
-        AttributeName: ttl
-        Enabled: true
+      # TimeToLiveSpecification:
+      #   AttributeName: ttl
+      #   Enabled: true
     Tags:
       - Key: VantaOwner
         Value: ${self:custom.vanta.owner}
       - Key: VantaNonProd
         Value: ${self:custom.vanta.nonProd}
       - Key: VantaDescription
-        Value: "Temporary storage for github user sign up and sign in oauth states"
+        Value: "Description of the Bucket"
       - Key: VantaContainsUserData
-        Value: false
+        Value: false # true if contains user data

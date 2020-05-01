@@ -51,6 +51,12 @@ custom:
   stage: ${opt:stage, self:provider.stage}
   webpack:
     webpackConfig: 'webpack.config.serverless.js'
+  vanta:
+    disabled:
+      default: true
+      production: false
+    owner: "troy@trycourier.com"
+    nonProd: ${self:custom.vanta.disabled.${self:custom.stage}, self:custom.vanta.disabled.default}
 
 functions:
   authorize:
