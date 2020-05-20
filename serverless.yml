@@ -16,6 +16,7 @@ provider:
     GITHUB_CLIENT_ID: ${self:custom.githubClientId}
     GITHUB_CLIENT_SECRET: ${self:custom.githubClientSecret}
     GITHUB_LOGIN_URL: "https://github.com"
+    LOG_LEVEL: ${env:LOG_LEVEL}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
