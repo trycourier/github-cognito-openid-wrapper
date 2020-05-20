@@ -1,5 +1,6 @@
 const winston = require('winston');
 const {
+  LOG_LEVEL,
   SPLUNK_URL,
   SPLUNK_TOKEN,
   SPLUNK_SOURCE,
@@ -7,8 +8,9 @@ const {
   SPLUNK_INDEX
 } = require('../config');
 
+const level = LOG_LEVEL || 'info';
 const logger = winston.createLogger({
-  level: 'info'
+  level
 });
 
 // Activate Splunk logging if Splunk's env variables are set
