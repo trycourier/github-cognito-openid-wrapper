@@ -4,6 +4,7 @@ Resources:
     Properties:
       AttributeMapping: {
         email: "email",
+        email_verified: "email_verified",
         gender: "gender",
         locale: "locale",
         name: "name",
